@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public Text BestScoreText;
+    public Button ReturnButton;
     
     private bool m_Started = false;
     private int m_Points;
@@ -24,7 +27,6 @@ public class MainManager : MonoBehaviour
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        
         int[] pointCountArray = new [] {1,1,2,2,5,5};
         for (int i = 0; i < LineCount; ++i)
         {
@@ -36,6 +38,9 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        BestScoreText.text = "Score: " + GameHandler.instance.player + " " + GameHandler.instance.score;
+
     }
 
     private void Update()
@@ -72,5 +77,15 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        GameHandler.instance.score = m_Points;
+
+        GameHandler.instance.SaveElement();
+        Debug.Log(GameHandler.instance.player);
+        Debug.Log(GameHandler.instance.score);
+    }
+
+    public void ReturnMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
